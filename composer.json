@@ -1,0 +1,40 @@
+{
+    "name": "jimchen/umeng-php-sdk",
+    "description": "友盟 PHP SDK",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "JimChen",
+            "email": "imjimchen@163.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "ext-json": "*",
+        "ext-openssl": "*",
+        "guzzlehttp/guzzle": "^7.2",
+        "pimple/pimple": "^3.3",
+        "ramsey/uuid": "^3.0 || ^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "EasyUmeng\\": "src"
+        }
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.18",
+        "phpunit/phpunit": "^7.5",
+        "mockery/mockery": "^1.2"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EasyUmeng\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "phpcs": "vendor/bin/php-cs-fixer fix",
+        "check-style": "vendor/bin/php-cs-fixer fix --using-cache=no --diff --config=.php_cs --dry-run --ansi",
+        "fix-style": "vendor/bin/php-cs-fixer fix --using-cache=no --config=.php_cs --ansi",
+        "test": "vendor/bin/phpunit --colors=always"
+    }
+}
