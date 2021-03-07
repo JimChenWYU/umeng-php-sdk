@@ -56,7 +56,7 @@ class BaseClientTest extends TestCase
         $options = [
             'foo' => 'bar',
             'json' => ['foo' => 'bar'],
-	        'query' => ['foo' => 'bar'],
+            'query' => ['foo' => 'bar'],
         ];
 
         $method = 'POST';
@@ -75,7 +75,7 @@ class BaseClientTest extends TestCase
 
             return true;
         }))->times(3)->andReturn($mockResponse);
-	    $client->expects()->castResponseToType()
+        $client->expects()->castResponseToType()
             ->with($mockResponse, \Mockery::any())
             ->andReturn(['foo' => 'mock-bar']);
 

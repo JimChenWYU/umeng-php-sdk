@@ -23,10 +23,10 @@ class ClientTest extends TestCase
         $client = $this->mockApiClient(Client::class, ['httpPostJson'], $this->makeApp());
 
         $client->expects()->httpPostJson('api/v1/mobile/info', [
-	        'token' => 'token-12345678',
+            'token' => 'token-12345678',
         ], [
-	        'appkey' => 'corpid@123',
-	        'verifyId' => '12345678',
+            'appkey' => 'corpid@123',
+            'verifyId' => '12345678',
         ])->andReturn('mock-result');
 
         self::assertSame('mock-result', $client->get('token-12345678', '12345678'));

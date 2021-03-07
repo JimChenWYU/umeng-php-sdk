@@ -85,7 +85,7 @@ class BaseClient
         }
 
         $query = $options['query'];
-	    $path = '/' . ltrim(parse_url($url, PHP_URL_PATH), '/');
+        $path = '/' . ltrim(parse_url($url, PHP_URL_PATH), '/');
 
         $baseHeaders = [
             'Accept' => 'application/json',
