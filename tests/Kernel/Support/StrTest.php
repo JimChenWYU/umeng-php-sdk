@@ -63,9 +63,4 @@ class StrTest extends TestCase
         self::assertFalse(Str::startsWith('foo_bar', 'bar'));
         self::assertTrue(Str::startsWith('foo_bar', ['bar', '_foo', 'foo']));
     }
-
-    public function testUuid()
-    {
-        self::assertInstanceOf(\Ramsey\Uuid\UuidInterface::class, Str::uuid());
-    }
 }

@@ -2,9 +2,12 @@
 
 namespace EasyUmeng\UVerify\Kernel;
 
+use Closure;
+use EasyUmeng\Kernel\Exceptions\InvalidConfigException;
 use EasyUmeng\Kernel\ServiceContainer;
-use EasyUmeng\Kernel\Support\Str;
+use EasyUmeng\Kernel\Support\Collection;
 use EasyUmeng\Kernel\Traits\HasHttpRequests;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Middleware;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -16,7 +19,7 @@ class BaseClient
     }
 
     /**
-     * @var \EasyUmeng\Kernel\ServiceContainer
+     * @var ServiceContainer
      */
     protected $app;
     /**
@@ -27,7 +30,7 @@ class BaseClient
     /**
      * BaseClient constructor.
      *
-     * @param \EasyUmeng\Kernel\ServiceContainer $app
+     * @param ServiceContainer $app
      */
     public function __construct(ServiceContainer $app)
     {
@@ -40,10 +43,10 @@ class BaseClient
      * @param string $url
      * @param array  $data
      *
-     * @return \Psr\Http\Message\ResponseInterface|\EasyUmeng\Kernel\Support\Collection|array|object|string
+     * @return ResponseInterface|Collection|array|object|string
      *
-     * @throws \EasyUmeng\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function httpPost(string $url, array $data = [])
     {
@@ -57,10 +60,10 @@ class BaseClient
      * @param array  $data
      * @param array  $query
      *
-     * @return \Psr\Http\Message\ResponseInterface|\EasyUmeng\Kernel\Support\Collection|array|object|string
+     * @return ResponseInterface|Collection|array|object|string
      *
-     * @throws \EasyUmeng\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function httpPostJson(string $url, array $data = [], array $query = [])
     {
@@ -73,10 +76,10 @@ class BaseClient
      * @param array  $options
      * @param bool   $returnRaw
      *
-     * @return \Psr\Http\Message\ResponseInterface|\EasyUmeng\Kernel\Support\Collection|array|object|string
+     * @return ResponseInterface|Collection|array|object|string
      *
-     * @throws \EasyUmeng\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function request(string $url, string $method = 'GET', array $options = [], $returnRaw = false)
     {
@@ -94,7 +97,7 @@ class BaseClient
             'X-Ca-Signature-Headers' => 'X-Ca-Version,X-Ca-Stage,X-Ca-Key,X-Ca-Timestamp,X-Ca-Nonce',
             'X-Ca-Stage' => 'RELEASE',
             'X-Ca-Key' => $this->app['config']->alikey,
-            'X-Ca-Nonce' => Str::uuid()->toString(),
+            'X-Ca-Nonce' => md5(json_encode($query) . uniqid('', false)),
             'X-Ca-Timestamp' => microtime(true) * 1000,
         ];
         $baseHeaders['X-Ca-Signature'] = Utils::generateSign($method, $path, $query, [], $baseHeaders, $this->app['config']->secret);
@@ -122,7 +125,7 @@ class BaseClient
     /**
      * Return retry middleware.
      *
-     * @return \Closure
+     * @return Closure
      */
     protected function retryMiddleware()
     {

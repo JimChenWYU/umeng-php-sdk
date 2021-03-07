@@ -3,7 +3,7 @@
 namespace EasyUmeng\Kernel\Support;
 
 use EasyUmeng\Kernel\Exceptions\RuntimeException;
-use Ramsey\Uuid\Uuid;
+use Exception;
 
 class Str
 {
@@ -29,13 +29,6 @@ class Str
     protected static $studlyCache = [];
 
     /**
-     * The callback that should be used to generate UUIDs.
-     *
-     * @var callable
-     */
-    protected static $uuidFactory;
-
-    /**
      * Convert a value to camel case.
      *
      * @param string $value
@@ -58,7 +51,7 @@ class Str
      *
      * @return string
      *
-     * @throws \EasyUmeng\Kernel\Exceptions\RuntimeException
+     * @throws RuntimeException
      */
     public static function random($length = 16)
     {
@@ -86,7 +79,7 @@ class Str
      *
      * @codeCoverageIgnore
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public static function randomBytes($length = 16)
     {
@@ -203,17 +196,5 @@ class Str
         }
 
         return false;
-    }
-
-    /**
-     * Generate a UUID (version 4).
-     *
-     * @return \Ramsey\Uuid\UuidInterface
-     */
-    public static function uuid()
-    {
-        return static::$uuidFactory
-            ? call_user_func(static::$uuidFactory)
-            : Uuid::uuid4();
     }
 }
