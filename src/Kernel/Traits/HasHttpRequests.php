@@ -60,7 +60,7 @@ trait HasHttpRequests
      *
      * @param \GuzzleHttp\ClientInterface $httpClient
      *
-     * @return \EasyUmeng\Kernel\Traits\HasHttpRequests
+     * @return static
      */
     public function setHttpClient(ClientInterface $httpClient)
     {

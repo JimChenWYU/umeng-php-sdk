@@ -1,0 +1,8 @@
+parameters:
+    level: 3
+    paths:
+        - src
+    inferPrivatePropertyTypeFromConstructor: true
+    ignoreErrors:
+        - '#Unsafe usage of new static\(\)#'
+        - '#Method EasyUmeng\\Kernel\\Support\\Collection::__set_state\(\) should return object but returns array#'

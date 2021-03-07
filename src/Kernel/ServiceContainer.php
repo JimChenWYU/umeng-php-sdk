@@ -15,6 +15,11 @@ use Pimple\Container;
 class ServiceContainer extends Container
 {
     /**
+     * @var string
+     */
+    protected $id;
+
+    /**
      * @var array
      */
     protected $providers = [];
