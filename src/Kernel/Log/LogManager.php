@@ -2,8 +2,11 @@
 
 namespace EasyUmeng\Kernel\Log;
 
-use InvalidArgumentException;
+use Closure;
 use EasyUmeng\Kernel\ServiceContainer;
+use Exception;
+use InvalidArgumentException;
+use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\FormattableHandlerInterface;
@@ -13,13 +16,17 @@ use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogHandler;
 use Monolog\Handler\WhatFailureGroupHandler;
-use Psr\Log\LoggerInterface;
 use Monolog\Logger as Monolog;
+use Psr\Log\LoggerInterface;
+use Throwable;
+use function array_merge;
+use function sprintf;
+use function sys_get_temp_dir;
 
 class LogManager implements LoggerInterface
 {
     /**
-     * @var \EasyUmeng\Kernel\ServiceContainer
+     * @var ServiceContainer
      */
     protected $app;
 
@@ -67,9 +74,9 @@ class LogManager implements LoggerInterface
      * @param  array  $channels
      * @param  string|null  $channel
      *
-     * @return \Psr\Log\LoggerInterface
+     * @return LoggerInterface
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function stack(array $channels, $channel = null)
     {
@@ -83,8 +90,7 @@ class LogManager implements LoggerInterface
      *
      * @return mixed
      *
-     * @throws
-     * \Exception
+     * @throws Exception
      */
     public function channel($channel = null)
     {
@@ -98,7 +104,7 @@ class LogManager implements LoggerInterface
      *
      * @return mixed
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function driver($driver = null)
     {
@@ -110,15 +116,15 @@ class LogManager implements LoggerInterface
      *
      * @param string $name
      *
-     * @return \Psr\Log\LoggerInterface
+     * @return LoggerInterface
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function get($name)
     {
         try {
             return $this->channels[$name] ?? ($this->channels[$name] = $this->resolve($name));
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $logger = $this->createEmergencyLogger();
 
             $logger->emergency('Unable to create configured logger. Using emergency logger.', [
@@ -134,16 +140,16 @@ class LogManager implements LoggerInterface
      *
      * @param string $name
      *
-     * @return \Psr\Log\LoggerInterface
+     * @return LoggerInterface
      *
      * @throws InvalidArgumentException
      */
     protected function resolve($name)
     {
-        $config = $this->app['config']->get(\sprintf('log.channels.%s', $name));
+        $config = $this->app['config']->get(sprintf('log.channels.%s', $name));
 
         if (is_null($config)) {
-            throw new InvalidArgumentException(\sprintf('Log [%s] is not defined.', $name));
+            throw new InvalidArgumentException(sprintf('Log [%s] is not defined.', $name));
         }
 
         if (isset($this->customCreators[$config['driver']])) {
@@ -156,7 +162,7 @@ class LogManager implements LoggerInterface
             return $this->{$driverMethod}($config);
         }
 
-        throw new InvalidArgumentException(\sprintf('Driver [%s] is not supported.', $config['driver']));
+        throw new InvalidArgumentException(sprintf('Driver [%s] is not supported.', $config['driver']));
     }
 
     /**
@@ -172,14 +178,14 @@ class LogManager implements LoggerInterface
     /**
      * Create an emergency log handler to avoid white screens of death.
      *
-     * @return \Monolog\Logger
+     * @return Monolog
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function createEmergencyLogger()
     {
         return new Monolog('EasyUmeng', $this->prepareHandlers([new StreamHandler(
-            \sys_get_temp_dir().'/easyumeng/easyumeng.log',
+            sys_get_temp_dir().'/easyumeng/easyumeng.log',
             $this->level(['level' => 'debug'])
         )]));
     }
@@ -187,16 +193,16 @@ class LogManager implements LoggerInterface
     /**
      * Create an aggregate log driver instance.
      *
-     * @return \Monolog\Logger
+     * @return Monolog
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function createStackDriver(array $config)
     {
         $handlers = [];
 
         foreach ($config['channels'] ?? [] as $channel) {
-            $tempHandlers = \array_merge($handlers, $this->channel($channel)->getHandlers());
+            $tempHandlers = array_merge($handlers, $this->channel($channel)->getHandlers());
             $handlers = $tempHandlers;
         }
 
@@ -210,9 +216,9 @@ class LogManager implements LoggerInterface
     /**
      * Create an instance of the single file log driver.
      *
-     * @return \Psr\Log\LoggerInterface
+     * @return LoggerInterface
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function createSingleDriver(array $config)
     {
@@ -230,7 +236,7 @@ class LogManager implements LoggerInterface
     /**
      * Create an instance of the daily file log driver.
      *
-     * @return \Psr\Log\LoggerInterface
+     * @return LoggerInterface
      */
     protected function createDailyDriver(array $config)
     {
@@ -249,7 +255,7 @@ class LogManager implements LoggerInterface
     /**
      * Create an instance of the syslog log driver.
      *
-     * @return \Psr\Log\LoggerInterface
+     * @return LoggerInterface
      */
     protected function createSyslogDriver(array $config)
     {
@@ -265,7 +271,7 @@ class LogManager implements LoggerInterface
     /**
      * Create an instance of the "error log" log driver.
      *
-     * @return \Psr\Log\LoggerInterface
+     * @return LoggerInterface
      */
     protected function createErrorlogDriver(array $config)
     {
@@ -301,7 +307,7 @@ class LogManager implements LoggerInterface
     /**
      * Prepare the handler for usage by Monolog.
      *
-     * @return \Monolog\Handler\HandlerInterface
+     * @return HandlerInterface
      */
     protected function prepareHandler(HandlerInterface $handler, array $config = [])
     {
@@ -317,7 +323,7 @@ class LogManager implements LoggerInterface
     /**
      * Get a Monolog formatter instance.
      *
-     * @return \Monolog\Formatter\FormatterInterface
+     * @return FormatterInterface
      */
     protected function formatter()
     {
@@ -380,9 +386,9 @@ class LogManager implements LoggerInterface
      *
      * @param string $driver
      *
-     * @return \EasyUmeng\Kernel\Log\LogManager
+     * @return LogManager
      */
-    public function extend($driver, \Closure $callback)
+    public function extend($driver, Closure $callback)
     {
         $this->customCreators[$driver] = $callback->bindTo($this, $this);
 
@@ -391,47 +397,47 @@ class LogManager implements LoggerInterface
 
     public function emergency($message, array $context = array())
     {
-        return $this->driver()->emergency($message, $context);
+        $this->driver()->emergency($message, $context);
     }
 
     public function alert($message, array $context = array())
     {
-        return $this->driver()->alert($message, $context);
+        $this->driver()->alert($message, $context);
     }
 
     public function critical($message, array $context = array())
     {
-        return $this->driver()->critical($message, $context);
+        $this->driver()->critical($message, $context);
     }
 
     public function error($message, array $context = array())
     {
-        return $this->driver()->error($message, $context);
+        $this->driver()->error($message, $context);
     }
 
     public function warning($message, array $context = array())
     {
-        return $this->driver()->warning($message, $context);
+        $this->driver()->warning($message, $context);
     }
 
     public function notice($message, array $context = array())
     {
-        return $this->driver()->notice($message, $context);
+        $this->driver()->notice($message, $context);
     }
 
     public function info($message, array $context = array())
     {
-        return $this->driver()->info($message, $context);
+        $this->driver()->info($message, $context);
     }
 
     public function debug($message, array $context = array())
     {
-        return $this->driver()->debug($message, $context);
+        $this->driver()->debug($message, $context);
     }
 
     public function log($level, $message, array $context = array())
     {
-        return $this->driver()->log($level, $message, $context);
+        $this->driver()->log($level, $message, $context);
     }
 
     /**
@@ -442,7 +448,7 @@ class LogManager implements LoggerInterface
      *
      * @return mixed
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __call($method, $parameters)
     {
