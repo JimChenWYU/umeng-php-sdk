@@ -103,6 +103,8 @@ class BaseClient
             'headers' => $baseHeaders
         ], $options);
 
+        $this->app['logger']->debug("GuzzleRequestOption", $options);
+
         $response = $this->performRequest($url, $method, $options);
 
         return $returnRaw ? $response : $this->castResponseToType($response, $this->app['config']->get('response_type'));

@@ -4,6 +4,7 @@ namespace EasyUmeng\Kernel;
 
 use EasyUmeng\Kernel\Providers\ConfigServiceProvider;
 use EasyUmeng\Kernel\Providers\HttpClientServiceProvider;
+use EasyUmeng\Kernel\Providers\LogServiceProvider;
 use Pimple\Container;
 
 /**
@@ -84,6 +85,7 @@ class ServiceContainer extends Container
     {
         return array_merge([
             ConfigServiceProvider::class,
+            LogServiceProvider::class,
             HttpClientServiceProvider::class,
         ], $this->providers);
     }
