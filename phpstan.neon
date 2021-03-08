@@ -6,3 +6,6 @@ parameters:
     ignoreErrors:
         - '#Unsafe usage of new static\(\)#'
         - '#Method EasyUmeng\\Kernel\\Support\\Collection::__set_state\(\) should return object but returns array#'
+        - '#Call to an undefined method EasyUmeng\\Kernel\\ServiceContainer::getUmengKey\(\)#'
+        - '#Call to an undefined method EasyUmeng\\Kernel\\ServiceContainer::getAliKey\(\)#'
+        - '#Call to an undefined method EasyUmeng\\Kernel\\ServiceContainer::getAliSecret\(\)#'

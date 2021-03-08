@@ -20,7 +20,7 @@ class BaseClient
     }
 
     /**
-     * @var ServiceContainer|Application
+     * @var Application|ServiceContainer
      */
     protected $app;
     /**
