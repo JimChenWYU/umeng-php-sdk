@@ -9,7 +9,7 @@ class Client extends BaseClient
     public function handle(string $phoneNumber, string $token, string $verifyId = '')
     {
         $query = [
-            'appkey' => $this->app['config']->appkey,
+            'appkey' => $this->app['config']->app_key,
             'verifyId' => $verifyId,
         ];
         $data = [

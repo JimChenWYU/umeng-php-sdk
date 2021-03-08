@@ -20,10 +20,10 @@ $ composer require jimchen/umeng-php-sdk -vvv
 use EasyUmeng\Factory;
 
 $app = Factory::uVerify([
-    'appkey' => '1234xxxxxxxx',
-    'alikey' => '1234xxxxxxxx',
-    'alisecret' => '1234xxxxxxxx',
-    'aes_prikey' => 'Mnfgxxxxxxxxx',
+    'app_key' => '1234xxxxxxxx',
+    'ali_key' => '1234xxxxxxxx',
+    'ali_secret' => '1234xxxxxxxx',
+    'aes_key' => 'Mnfgxxxxxxxxx',
     
     'response_type' => 'array', // Options: 'collection', 'array', 'object', 'raw' 
     

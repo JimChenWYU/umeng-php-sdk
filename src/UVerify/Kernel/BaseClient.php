@@ -7,6 +7,7 @@ use EasyUmeng\Kernel\Exceptions\InvalidConfigException;
 use EasyUmeng\Kernel\ServiceContainer;
 use EasyUmeng\Kernel\Support\Collection;
 use EasyUmeng\Kernel\Traits\HasHttpRequests;
+use EasyUmeng\UVerify\Application;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Middleware;
 use Psr\Http\Message\RequestInterface;
@@ -19,7 +20,7 @@ class BaseClient
     }
 
     /**
-     * @var ServiceContainer
+     * @var ServiceContainer|Application
      */
     protected $app;
     /**
@@ -96,11 +97,11 @@ class BaseClient
             'X-Ca-Version' => 1,
             'X-Ca-Signature-Headers' => 'X-Ca-Version,X-Ca-Stage,X-Ca-Key,X-Ca-Timestamp,X-Ca-Nonce',
             'X-Ca-Stage' => 'RELEASE',
-            'X-Ca-Key' => $this->app['config']->alikey,
+            'X-Ca-Key' => $this->app->getAliKey(),
             'X-Ca-Nonce' => md5(json_encode($query) . uniqid('', false)),
             'X-Ca-Timestamp' => (string)(time() * 1000),
         ];
-        $baseHeaders['X-Ca-Signature'] = Utils::generateSign($method, $path, $query, [], $baseHeaders, $this->app['config']->alisecret);
+        $baseHeaders['X-Ca-Signature'] = Utils::generateSign($method, $path, $query, [], $baseHeaders, $this->app->getAliSecret());
 
         $options = array_merge([
             'headers' => $baseHeaders

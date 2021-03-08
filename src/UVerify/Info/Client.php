@@ -9,7 +9,7 @@ class Client extends BaseClient
     public function get(string $token, string $verifyId = '')
     {
         $query = [
-            'appkey' => $this->app['config']->appkey,
+            'appkey' => $this->app->getUmengKey(),
             'verifyId' => $verifyId,
         ];
         $data = [

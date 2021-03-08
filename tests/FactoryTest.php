@@ -10,24 +10,24 @@ class FactoryTest extends TestCase
     public function testStaticCall()
     {
         $uVerify = Factory::uVerify([
-            'appkey' => 'corpid@123',
-            'alikey' => 'corpid@123',
-            'aes_prikey' => 'corpid@123',
+            'app_key' => 'corpid@123',
+            'ali_key' => 'corpid@123',
+            'aes_key' => 'corpid@123',
         ]);
 
         $uVerifyFromMake = Factory::make('uVerify', [
-            'appkey' => 'corpid@123',
-            'alikey' => 'corpid@123',
-            'aes_prikey' => 'corpid@123',
+            'app_key' => 'corpid@123',
+            'ali_key' => 'corpid@123',
+            'aes_key' => 'corpid@123',
         ]);
 
         self::assertInstanceOf(Application::class, $uVerify);
         self::assertInstanceOf(Application::class, $uVerifyFromMake);
 
         $expected = [
-            'appkey' => 'corpid@123',
-            'alikey' => 'corpid@123',
-            'aes_prikey' => 'corpid@123',
+            'app_key' => 'corpid@123',
+            'ali_key' => 'corpid@123',
+            'aes_key' => 'corpid@123',
         ];
 
         self::assertArraySubset($expected, $uVerify['config']->all());

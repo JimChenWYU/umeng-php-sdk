@@ -11,10 +11,10 @@ class ClientTest extends TestCase
     private function makeApp($config = [])
     {
         return new Application(array_merge([
-            'appkey' => 'corpid@123',
-            'alisecret' => 'corpid@123',
-            'alikey' => 'corpid@123',
-            'aes_prikey' => 'corpid@123',
+            'app_key' => 'corpid@123',
+            'ali_secret' => 'corpid@123',
+            'ali_key' => 'corpid@123',
+            'aes_key' => 'corpid@123',
         ], $config));
     }
 
