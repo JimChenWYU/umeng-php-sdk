@@ -8,10 +8,11 @@ class Utils
     {
         $sortParams = array_merge($query, $form);
         ksort($sortParams);
+        ksort($headers);
 
         $sb = $httpMethod . "\n";
-        $sb .= $headers['Accept'] . "\n";
-        $sb .= $headers['Content-Type'] . "\n";
+        $sb .= $headers['Accept'] . "\n\n";
+        $sb .= $headers['Content-Type'] . "\n\n";
         unset(
             $headers['Content-Type'],
             $headers['Accept'],

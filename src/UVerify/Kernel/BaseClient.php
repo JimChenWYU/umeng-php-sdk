@@ -98,7 +98,7 @@ class BaseClient
             'X-Ca-Stage' => 'RELEASE',
             'X-Ca-Key' => $this->app['config']->alikey,
             'X-Ca-Nonce' => md5(json_encode($query) . uniqid('', false)),
-            'X-Ca-Timestamp' => microtime(true) * 1000,
+            'X-Ca-Timestamp' => (string)(time() * 1000),
         ];
         $baseHeaders['X-Ca-Signature'] = Utils::generateSign($method, $path, $query, [], $baseHeaders, $this->app['config']->secret);
 
@@ -106,6 +106,7 @@ class BaseClient
             'headers' => $baseHeaders
         ], $options);
 
+        $this->app['logger']->debug("signature:{$baseHeaders['X-Ca-Signature']}");
         $this->app['logger']->debug("GuzzleRequestOption", $options);
 
         $response = $this->performRequest($url, $method, $options);
