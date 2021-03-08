@@ -3,6 +3,7 @@
 namespace EasyUmeng\Tests;
 
 use EasyUmeng\Factory;
+use EasyUmeng\UVerify\Application;
 
 class FactoryTest extends TestCase
 {
@@ -10,24 +11,21 @@ class FactoryTest extends TestCase
     {
         $uVerify = Factory::uVerify([
             'appkey' => 'corpid@123',
-            'secret' => 'corpid@123',
             'alikey' => 'corpid@123',
             'aes_prikey' => 'corpid@123',
         ]);
 
         $uVerifyFromMake = Factory::make('uVerify', [
             'appkey' => 'corpid@123',
-            'secret' => 'corpid@123',
             'alikey' => 'corpid@123',
             'aes_prikey' => 'corpid@123',
         ]);
 
-        self::assertInstanceOf(\EasyUmeng\UVerify\Application::class, $uVerify);
-        self::assertInstanceOf(\EasyUmeng\UVerify\Application::class, $uVerifyFromMake);
+        self::assertInstanceOf(Application::class, $uVerify);
+        self::assertInstanceOf(Application::class, $uVerifyFromMake);
 
         $expected = [
             'appkey' => 'corpid@123',
-            'secret' => 'corpid@123',
             'alikey' => 'corpid@123',
             'aes_prikey' => 'corpid@123',
         ];

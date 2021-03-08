@@ -21,8 +21,8 @@ use EasyUmeng\Factory;
 
 $app = Factory::uVerify([
     'appkey' => '1234xxxxxxxx',
-    'secret' => '1234xxxxxxxx',
     'alikey' => '1234xxxxxxxx',
+    'alisecret' => '1234xxxxxxxx',
     'aes_prikey' => 'Mnfgxxxxxxxxx',
     
     'response_type' => 'array', // Options: 'collection', 'array', 'object', 'raw' 

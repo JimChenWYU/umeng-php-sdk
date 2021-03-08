@@ -7,6 +7,8 @@ use EasyUmeng\Kernel\ServiceContainer;
 use EasyUmeng\Tests\TestCase;
 use EasyUmeng\UVerify\Application;
 use EasyUmeng\UVerify\Kernel\BaseClient;
+use Mockery;
+use function sprintf;
 
 class BaseClientTest extends TestCase
 {
@@ -14,7 +16,7 @@ class BaseClientTest extends TestCase
     {
         return new Application(array_merge([
             'appkey' => 'corpid@123',
-            'secret' => 'corpid@123',
+            'alisecret' => 'corpid@123',
             'alikey' => 'corpid@123',
             'aes_prikey' => 'corpid@123',
         ], $config));
@@ -22,10 +24,10 @@ class BaseClientTest extends TestCase
 
     public function makeClient($methods = [], ServiceContainer $app = null)
     {
-        $methods = !empty($methods) ? \sprintf('[%s]', implode(',', (array) $methods)) : '';
-        $app = $app ?? \Mockery::mock(ServiceContainer::class);
+        $methods = !empty($methods) ? sprintf('[%s]', implode(',', (array) $methods)) : '';
+        $app = $app ?? Mockery::mock(ServiceContainer::class);
 
-        return \Mockery::mock(BaseClient::class."{$methods}", [$app])->makePartial();
+        return Mockery::mock(BaseClient::class."{$methods}", [$app])->makePartial();
     }
 
     public function testHttpPost()
@@ -64,7 +66,7 @@ class BaseClientTest extends TestCase
             ->shouldAllowMockingProtectedMethods();
         $mockResponse = new Response(200, [], 'response-content');
         // default value
-        $client->expects()->performRequest($url, $method, \Mockery::on(function ($options) {
+        $client->expects()->performRequest($url, $method, Mockery::on(function ($options) {
             self::assertSame('bar', $options['foo']);
             $jsonInOptions = $options['json'];
             $queryInOptions = $options['query'];
@@ -76,7 +78,7 @@ class BaseClientTest extends TestCase
             return true;
         }))->times(3)->andReturn($mockResponse);
         $client->expects()->castResponseToType()
-            ->with($mockResponse, \Mockery::any())
+            ->with($mockResponse, Mockery::any())
             ->andReturn(['foo' => 'mock-bar']);
 
         // $returnResponse = false

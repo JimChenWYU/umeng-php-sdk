@@ -100,7 +100,7 @@ class BaseClient
             'X-Ca-Nonce' => md5(json_encode($query) . uniqid('', false)),
             'X-Ca-Timestamp' => (string)(time() * 1000),
         ];
-        $baseHeaders['X-Ca-Signature'] = Utils::generateSign($method, $path, $query, [], $baseHeaders, $this->app['config']->secret);
+        $baseHeaders['X-Ca-Signature'] = Utils::generateSign($method, $path, $query, [], $baseHeaders, $this->app['config']->alisecret);
 
         $options = array_merge([
             'headers' => $baseHeaders

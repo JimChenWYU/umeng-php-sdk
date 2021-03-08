@@ -12,7 +12,7 @@ class ClientTest extends TestCase
     {
         return new Application(array_merge([
             'appkey' => 'corpid@123',
-            'secret' => 'corpid@123',
+            'alisecret' => 'corpid@123',
             'alikey' => 'corpid@123',
             'aes_prikey' => 'corpid@123',
         ], $config));
