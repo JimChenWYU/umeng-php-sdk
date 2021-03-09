@@ -22,3 +22,24 @@ jobs:
       run: composer update --prefer-dist --no-interaction --no-suggest --prefer-${{ matrix.perfer }}
     - name: Run PHPUnit
       run: ./vendor/bin/phpunit
+
+  guzzle6.0-test:
+    name: PHP-${{ matrix.php_version }}-${{ matrix.perfer }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php_version:
+          - 7.2
+        perfer:
+          - stable
+      container:
+        image: nauxliu/php-ci-image:${{ matrix.php_version }}
+      steps:
+        - uses: actions/checkout@master
+        - name: Install Dependencies
+          run: composer update --prefer-dist --no-interaction --no-suggest --prefer-${{ matrix.perfer }}
+        - name: Install guzzlehttp/guzzle:^6.0
+          run: composer require "guzzlehttp/guzzle:^6.0"
+        - name: Run PHPUnit
+          run: ./vendor/bin/phpunit
