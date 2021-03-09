@@ -23,7 +23,7 @@ jobs:
     - name: Run PHPUnit
       run: ./vendor/bin/phpunit
 
-  guzzle6.0_test:
+  phpunitForGuzzle6.0:
     name: PHP-${{ matrix.php_version }}-${{ matrix.perfer }}
     runs-on: ubuntu-latest
     strategy:
