@@ -35,11 +35,11 @@ jobs:
           - stable
       container:
         image: nauxliu/php-ci-image:${{ matrix.php_version }}
-      steps:
-        - uses: actions/checkout@master
-        - name: Install Dependencies
-          run: composer update --prefer-dist --no-interaction --no-suggest --prefer-${{ matrix.perfer }}
-        - name: Install guzzlehttp/guzzle:^6.0
-          run: composer require "guzzlehttp/guzzle:^6.0"
-        - name: Run PHPUnit
-          run: ./vendor/bin/phpunit
+    steps:
+      - uses: actions/checkout@master
+      - name: Install Dependencies
+        run: composer update --prefer-dist --no-interaction --no-suggest --prefer-${{ matrix.perfer }}
+      - name: Install guzzlehttp/guzzle:^6.0
+        run: composer require "guzzlehttp/guzzle:^6.0"
+      - name: Run PHPUnit
+        run: ./vendor/bin/phpunit
