@@ -9,9 +9,11 @@ use EasyUmeng\Kernel\Support\Collection;
 use EasyUmeng\Kernel\Traits\HasHttpRequests;
 use EasyUmeng\UVerify\Application;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LogLevel;
 
 class BaseClient
 {
@@ -122,6 +124,20 @@ class BaseClient
     {
         // retry
         $this->pushMiddleware($this->retryMiddleware(), 'retry');
+        // log
+        $this->pushMiddleware($this->logMiddleware(), 'log');
+    }
+
+    /**
+     * Log the request.
+     *
+     * @return Closure
+     */
+    protected function logMiddleware()
+    {
+        $formatter = new MessageFormatter($this->app['config']['http.log_template'] ?? MessageFormatter::DEBUG);
+
+        return Middleware::log($this->app['logger'], $formatter, LogLevel::DEBUG);
     }
 
     /**
