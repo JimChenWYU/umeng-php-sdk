@@ -6,6 +6,7 @@ namespace EasyUmeng;
  * Class Factory
  *
  * @method static \EasyUmeng\UVerify\Application uVerify(array $config)
+ * @method static \EasyUmeng\UPush\Application   uPush(array $config)
  */
 class Factory
 {
