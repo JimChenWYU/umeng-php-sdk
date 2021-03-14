@@ -43,16 +43,12 @@ class BaseClientTest extends TestCase
 
     public function testSend()
     {
-        $client = $this->makeClient('httpPostJson', $this->makeApp());
+        $client = $this->makeClient('httpPostJson');
         $url = 'api/send';
         $data = [
             'foo' => 'bar',
-            'timestamp' => 1234,
-            'appkey' => 'corpid@123',
-            'production_mode' => false,
         ];
-        $query = [ 'sign' => md5('POST' . 'api/send' . json_encode($data) . 'corpid@123') ];
-        $client->expects()->httpPostJson($url, $data, $query)->andReturn('mock-result');
+        $client->expects()->httpPostJson($url, $data)->andReturn('mock-result');
         self::assertSame('mock-result', $client->send(new DummyArrayable($data)));
     }
 
