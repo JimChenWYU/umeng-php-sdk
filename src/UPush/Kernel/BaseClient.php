@@ -44,9 +44,7 @@ class BaseClient
      */
     public function send(Arrayable $params)
     {
-        $sign = md5('POST' . 'api/send' . json_encode($data = $params->toArray()) . $this->app['config']->secret);
-
-        return $this->httpPostJson('api/send', $data, [ 'sign' => $sign ]);
+        return $this->httpPostJson('api/send', $params->toArray());
     }
 
     /**
@@ -80,15 +78,15 @@ class BaseClient
         return $this->request($url, 'POST', ['query' => $query, 'json' => $data]);
     }
 
-	/**
-	 * @param string $url
-	 * @param string $method
-	 * @param array  $options
-	 * @param false  $returnRaw
-	 * @return array|Collection|object|ResponseInterface|string
-	 * @throws GuzzleException
-	 * @throws InvalidConfigException
-	 */
+    /**
+     * @param string $url
+     * @param string $method
+     * @param array  $options
+     * @param false  $returnRaw
+     * @return array|Collection|object|ResponseInterface|string
+     * @throws GuzzleException
+     * @throws InvalidConfigException
+     */
     public function request(string $url, $method = 'GET', $options = [], $returnRaw = false)
     {
         if (empty($this->middlewares)) {
@@ -100,6 +98,10 @@ class BaseClient
             'appkey' => $this->app['config']->app_key,
             'timestamp' => time(),
             'production_mode' => $this->app['config']->production_mode,
+        ]);
+        $base = $this->app->config->get('http.base_uri');
+        $options['query'] = array_merge($options['query'], [
+            'sign' => md5('POST' . "{$base}{$url}" . json_encode($options['json']) . $this->app['config']->secret),
         ]);
 
         $response = $this->performRequest($url, $method, $options);
