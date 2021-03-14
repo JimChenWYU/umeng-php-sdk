@@ -2,6 +2,7 @@
 
 namespace EasyUmeng\UPush\Kernel;
 
+use Closure;
 use EasyUmeng\Kernel\Contracts\Arrayable;
 use EasyUmeng\Kernel\Exceptions\InvalidConfigException;
 use EasyUmeng\Kernel\ServiceContainer;
