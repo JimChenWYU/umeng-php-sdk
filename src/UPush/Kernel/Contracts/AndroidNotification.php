@@ -2,9 +2,10 @@
 
 namespace EasyUmeng\UPush\Kernel\Contracts;
 
+use EasyUmeng\Kernel\Contracts\Arrayable;
 use EasyUmeng\UPush\Kernel\Exceptions\UnsupportedConfigureException;
 
-abstract class AndroidNotification extends Notification
+abstract class AndroidNotification extends Notification implements Arrayable
 {
     // The array for payload, please see API doc for more information
     protected $androidPayload = [

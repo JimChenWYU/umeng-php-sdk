@@ -2,10 +2,9 @@
 
 namespace EasyUmeng\UPush\Kernel;
 
-use EasyUmeng\Kernel\Contracts\Arrayable;
 use EasyUmeng\UPush\Kernel\Contracts\AndroidNotification;
 
-class AndroidCustomizedcast extends AndroidNotification implements Arrayable
+class AndroidCustomizedcast extends AndroidNotification
 {
     public function __construct(array $params, array $extras, string $alias, string $aliasType)
     {

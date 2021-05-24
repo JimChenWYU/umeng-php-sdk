@@ -2,10 +2,9 @@
 
 namespace EasyUmeng\UPush\Kernel;
 
-use EasyUmeng\Kernel\Contracts\Arrayable;
 use EasyUmeng\UPush\Kernel\Contracts\IOSNotification;
 
-class IOSBroadcast extends IOSNotification implements Arrayable
+class IOSBroadcast extends IOSNotification
 {
     public function __construct(array $params = [], array $customized = [])
     {
