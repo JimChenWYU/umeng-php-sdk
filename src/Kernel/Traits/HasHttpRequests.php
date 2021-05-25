@@ -5,6 +5,7 @@ namespace EasyUmeng\Kernel\Traits;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Utils;
 use Psr\Http\Message\ResponseInterface;
 
 trait HasHttpRequests
@@ -188,9 +189,9 @@ trait HasHttpRequests
             $options['headers'] = array_merge($options['headers'] ?? [], ['Content-Type' => 'application/json']);
 
             if (empty($options['json'])) {
-                $options['body'] = \GuzzleHttp\json_encode($options['json'], JSON_FORCE_OBJECT);
+                $options['body'] = $this->jsonEncode($options['json'], JSON_FORCE_OBJECT);
             } else {
-                $options['body'] = \GuzzleHttp\json_encode($options['json'], JSON_UNESCAPED_UNICODE);
+                $options['body'] = $this->jsonEncode($options['json'], JSON_UNESCAPED_UNICODE);
             }
 
             unset($options['json']);
@@ -212,6 +213,17 @@ trait HasHttpRequests
                 : $handler;
         }
 
-        return \GuzzleHttp\choose_handler();
+        return Utils::chooseHandler();
+    }
+
+    /**
+     * @param mixed $value
+     * @param int $options
+     * @param int $depth
+     * @return string
+     */
+    protected function jsonEncode($value, int $options = 0, int $depth = 512)
+    {
+        return Utils::jsonEncode($value, $options, $depth);
     }
 }

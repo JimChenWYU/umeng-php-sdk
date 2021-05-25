@@ -102,7 +102,7 @@ class BaseClient
         ]);
         $base = $this->app->config->get('http.base_uri');
         $options['query'] = array_merge($options['query'], [
-            'sign' => md5('POST' . "{$base}{$url}" . json_encode($options['json']) . $this->app['config']->secret),
+            'sign' => md5('POST' . "{$base}{$url}" . $this->jsonEncode($options['json'], JSON_UNESCAPED_UNICODE) . $this->app['config']->secret),
         ]);
 
         $response = $this->performRequest($url, $method, $options);
