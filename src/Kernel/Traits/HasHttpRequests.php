@@ -5,7 +5,6 @@ namespace EasyUmeng\Kernel\Traits;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Utils;
 use Psr\Http\Message\ResponseInterface;
 
 trait HasHttpRequests
@@ -101,7 +100,7 @@ trait HasHttpRequests
         if (!is_null($name)) {
             $this->middlewares[$name] = $middleware;
         } else {
-            array_push($this->middlewares, $middleware);
+            $this->middlewares[] = $middleware;
         }
 
         return $this;
@@ -213,7 +212,7 @@ trait HasHttpRequests
                 : $handler;
         }
 
-        return Utils::chooseHandler();
+        return \GuzzleHttp\choose_handler();
     }
 
     /**
@@ -224,6 +223,6 @@ trait HasHttpRequests
      */
     protected function jsonEncode($value, int $options = 0, int $depth = 512)
     {
-        return Utils::jsonEncode($value, $options, $depth);
+        return \GuzzleHttp\json_encode($value, $options, $depth);
     }
 }
